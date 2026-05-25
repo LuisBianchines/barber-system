@@ -3,6 +3,7 @@ export type Barber = {
   name: string;
   email: string;
   avatarUrl?: string;
+  active: boolean;
 };
 
 export type Availability = {
