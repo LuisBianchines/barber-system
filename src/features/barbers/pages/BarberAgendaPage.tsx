@@ -8,12 +8,12 @@ import { ErrorMessage } from '../../../components/ui/ErrorMessage';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { useToast } from '../../../components/ui/Toast';
 import { completeAppointment, getBarberAppointments } from '../../appointments/services/appointmentsService';
-import type { Appointment } from '../../appointments/types';
+import type { AppointmentWithRelations } from '../../appointments/types';
 
 export function BarberAgendaPage() {
   const today = new Date().toISOString().split('T')[0];
   const [selectedDate, setSelectedDate] = useState(today);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [completing, setCompleting] = useState<string | null>(null);
@@ -32,15 +32,13 @@ export function BarberAgendaPage() {
     }
   }
 
-  useEffect(() => {
-    fetchAppointments(selectedDate);
-  }, [selectedDate]);
+  useEffect(() => { fetchAppointments(selectedDate); }, [selectedDate]);
 
   async function handleComplete(id: string) {
     setCompleting(id);
     try {
       const updated = await completeAppointment(id);
-      setAppointments((prev) => prev.map((a) => (a.id === id ? updated : a)));
+      setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, ...updated } : a)));
       showToast('Atendimento concluído.', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Erro ao concluir atendimento.', 'error');
@@ -72,25 +70,17 @@ export function BarberAgendaPage() {
       {!loading && !error && appointments.length > 0 && (
         <div className="flex flex-col gap-3">
           {appointments.map((a) => (
-            <Card
-              key={a.id}
-              className={`flex flex-col gap-3 ${a.status === 'CANCELLED' ? 'opacity-60' : ''}`}
-            >
+            <Card key={a.id} className={`flex flex-col gap-3 ${a.status === 'CANCELLED' ? 'opacity-60' : ''}`}>
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-col gap-0.5">
                   <p className="font-medium text-zinc-900">{a.startTime} — {a.endTime}</p>
-                  <p className="text-sm text-zinc-700">{a.clientName ?? 'Cliente'}</p>
-                  <p className="text-sm text-zinc-500">{a.serviceName ?? 'Serviço'}</p>
+                  <p className="text-sm text-zinc-700">{a.client?.name ?? '—'}</p>
+                  <p className="text-sm text-zinc-500">{a.service?.name ?? '—'}</p>
                 </div>
                 <StatusBadge status={a.status} />
               </div>
               {a.status === 'SCHEDULED' && (
-                <Button
-                  size="sm"
-                  loading={completing === a.id}
-                  onClick={() => handleComplete(a.id)}
-                  className="self-start"
-                >
+                <Button size="sm" loading={completing === a.id} onClick={() => handleComplete(a.id)} className="self-start">
                   Concluir
                 </Button>
               )}

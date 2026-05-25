@@ -77,7 +77,6 @@ export function AdminServicesPage() {
         description: form.description || undefined,
         price: parseFloat(form.price),
         durationMinutes: parseInt(form.durationMinutes),
-        active: true,
       };
       if (editingId) {
         const updated = await adminUpdateService(editingId, payload);
@@ -110,10 +109,7 @@ export function AdminServicesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title="Serviços"
-        action={<Button size="sm" onClick={openCreate}>Novo serviço</Button>}
-      />
+      <PageHeader title="Serviços" action={<Button size="sm" onClick={openCreate}>Novo serviço</Button>} />
 
       {showForm && (
         <Card className="flex flex-col gap-4">
@@ -139,7 +135,7 @@ export function AdminServicesPage() {
             <div>
               <p className="font-medium text-zinc-900">{s.name}</p>
               <p className="text-sm text-zinc-500">
-                {s.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} · {s.durationMinutes} min
+                {Number(s.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} · {s.durationMinutes} min
                 {!s.active && <span className="ml-2 text-xs text-red-500">Inativo</span>}
               </p>
             </div>

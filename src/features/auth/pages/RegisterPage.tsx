@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerSchema, type RegisterFormData } from '../schemas/registerSchema';
-import { register as registerUser } from '../services/authService';
+import { register as registerUser, login } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../../../components/ui/Toast';
 import { Input } from '../../../components/ui/Input';
@@ -22,7 +22,8 @@ export function RegisterPage() {
   async function onSubmit(data: RegisterFormData) {
     try {
       const { confirmPassword: _, ...payload } = data;
-      const { token, user } = await registerUser(payload);
+      await registerUser(payload);
+      const { token, user } = await login({ email: payload.email, password: payload.password });
       setSession(token, user);
       showToast('Cadastro realizado com sucesso!', 'success');
       navigate('/app', { replace: true });

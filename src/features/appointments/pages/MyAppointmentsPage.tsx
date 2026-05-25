@@ -22,8 +22,7 @@ export function MyAppointmentsPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getMyAppointments();
-      setAppointments(data);
+      setAppointments(await getMyAppointments());
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao carregar agendamentos.');
     } finally {
@@ -31,9 +30,7 @@ export function MyAppointmentsPage() {
     }
   }
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
+  useEffect(() => { fetchAppointments(); }, []);
 
   async function handleCancel(id: string) {
     if (!window.confirm('Tem certeza que deseja cancelar este agendamento?')) return;
@@ -50,12 +47,8 @@ export function MyAppointmentsPage() {
   }
 
   const now = new Date().toISOString().split('T')[0];
-  const upcoming = appointments.filter(
-    (a) => a.appointmentDate >= now && a.status === 'SCHEDULED'
-  );
-  const past = appointments.filter(
-    (a) => a.appointmentDate < now || a.status !== 'SCHEDULED'
-  );
+  const upcoming = appointments.filter((a) => a.appointmentDate.slice(0, 10) >= now && a.status === 'SCHEDULED');
+  const past = appointments.filter((a) => a.appointmentDate.slice(0, 10) < now || a.status !== 'SCHEDULED');
 
   if (loading) return <LoadingState message="Carregando agendamentos..." />;
   if (error) return <ErrorMessage message={error} onRetry={fetchAppointments} />;
@@ -85,7 +78,7 @@ export function MyAppointmentsPage() {
 
       {upcoming.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-zinc-500 uppercase tracking-wide">Próximos</h2>
+          <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Próximos</h2>
           {upcoming.map((a) => (
             <AppointmentCard key={a.id} appointment={a} onCancel={handleCancel} cancelling={cancelling === a.id} />
           ))}
@@ -94,7 +87,7 @@ export function MyAppointmentsPage() {
 
       {past.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-zinc-500 uppercase tracking-wide">Histórico</h2>
+          <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Histórico</h2>
           {past.map((a) => (
             <AppointmentCard key={a.id} appointment={a} />
           ))}
@@ -111,32 +104,24 @@ type AppointmentCardProps = {
 };
 
 function AppointmentCard({ appointment: a, onCancel, cancelling }: AppointmentCardProps) {
-  const date = new Date(a.appointmentDate + 'T00:00:00').toLocaleDateString('pt-BR', {
+  const date = new Date(a.appointmentDate).toLocaleDateString('pt-BR', {
     weekday: 'short',
     day: '2-digit',
     month: 'short',
+    timeZone: 'UTC',
   });
 
   return (
     <Card className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col gap-0.5">
-          <p className="font-medium text-zinc-900">{a.serviceName ?? 'Serviço'}</p>
-          <p className="text-sm text-zinc-500">{a.barberName ?? 'Barbeiro'}</p>
+          <p className="text-sm text-zinc-600">{date} às {a.startTime}</p>
+          <p className="text-xs text-zinc-400">até {a.endTime}</p>
         </div>
         <StatusBadge status={a.status} />
       </div>
-      <p className="text-sm text-zinc-600">
-        {date} às {a.startTime}
-      </p>
       {onCancel && a.status === 'SCHEDULED' && (
-        <Button
-          variant="danger"
-          size="sm"
-          loading={cancelling}
-          onClick={() => onCancel(a.id)}
-          className="self-start"
-        >
+        <Button variant="danger" size="sm" loading={cancelling} onClick={() => onCancel(a.id)} className="self-start">
           Cancelar
         </Button>
       )}

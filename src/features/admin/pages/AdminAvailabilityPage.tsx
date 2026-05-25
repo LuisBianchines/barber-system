@@ -10,10 +10,10 @@ import type { Barber } from '../../barbers/types';
 
 const DAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
-type SlotForm = { dayOfWeek: number; startTime: string; endTime: string; enabled: boolean };
+type SlotForm = { weekday: number; startTime: string; endTime: string; enabled: boolean };
 
 const DEFAULT_SLOTS: SlotForm[] = DAYS.map((_, i) => ({
-  dayOfWeek: i,
+  weekday: i,
   startTime: '09:00',
   endTime: '18:00',
   enabled: i >= 1 && i <= 5,
@@ -42,14 +42,14 @@ export function AdminAvailabilityPage() {
     adminGetAvailability(selectedBarberId)
       .then((data) => {
         const updated = DEFAULT_SLOTS.map((def) => {
-          const found = data.find((d) => d.dayOfWeek === def.dayOfWeek);
+          const found = data.find((d) => d.weekday === def.weekday);
           return found
-            ? { dayOfWeek: found.dayOfWeek, startTime: found.startTime, endTime: found.endTime, enabled: true }
+            ? { weekday: found.weekday, startTime: found.startTime, endTime: found.endTime, enabled: true }
             : { ...def, enabled: false };
         });
         setSlots(updated);
       })
-      .catch(() => setSlots(DEFAULT_SLOTS))
+      .catch(() => setSlots(DEFAULT_SLOTS.map((s) => ({ ...s, enabled: false }))))
       .finally(() => setLoadingSlots(false));
   }, [selectedBarberId]);
 
@@ -59,7 +59,7 @@ export function AdminAvailabilityPage() {
     try {
       await adminSetAvailability(
         selectedBarberId,
-        slots.filter((s) => s.enabled).map(({ dayOfWeek, startTime, endTime }) => ({ dayOfWeek, startTime, endTime }))
+        slots.filter((s) => s.enabled).map(({ weekday, startTime, endTime }) => ({ weekday, startTime, endTime }))
       );
       showToast('Disponibilidade salva.', 'success');
     } catch (err) {
@@ -85,7 +85,7 @@ export function AdminAvailabilityPage() {
         >
           <option value="">Selecione um barbeiro</option>
           {barbers.map((b) => (
-            <option key={b.id} value={b.id}>{b.name}</option>
+            <option key={b.id} value={b.id}>{b.user.name}</option>
           ))}
         </select>
       </div>
@@ -97,7 +97,7 @@ export function AdminAvailabilityPage() {
           ) : (
             <div className="flex flex-col gap-3">
               {slots.map((slot, idx) => (
-                <Card key={slot.dayOfWeek} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+                <Card key={slot.weekday} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
                   <label className="flex items-center gap-2 min-w-[110px]">
                     <input
                       type="checkbox"
@@ -109,7 +109,7 @@ export function AdminAvailabilityPage() {
                       }}
                       className="h-4 w-4 rounded border-zinc-300"
                     />
-                    <span className="text-sm font-medium text-zinc-800">{DAYS[slot.dayOfWeek]}</span>
+                    <span className="text-sm font-medium text-zinc-800">{DAYS[slot.weekday]}</span>
                   </label>
                   {slot.enabled && (
                     <div className="flex items-center gap-2 text-sm text-zinc-700">

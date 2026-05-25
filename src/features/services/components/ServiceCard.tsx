@@ -7,16 +7,12 @@ type ServiceCardProps = {
   service: Service;
 };
 
-function formatPrice(price: number): string {
-  return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+function formatPrice(price: string | number): string {
+  return Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 export function ServiceCard({ service }: ServiceCardProps) {
   const navigate = useNavigate();
-
-  function handleBook() {
-    navigate(`/app/agendar?serviceId=${service.id}`);
-  }
 
   return (
     <Card className="flex flex-col gap-3">
@@ -31,7 +27,11 @@ export function ServiceCard({ service }: ServiceCardProps) {
         <span>•</span>
         <span>{service.durationMinutes} min</span>
       </div>
-      <Button onClick={handleBook} className="w-full" disabled={!service.active}>
+      <Button
+        onClick={() => navigate(`/app/agendar?serviceId=${service.id}`)}
+        className="w-full"
+        disabled={!service.active}
+      >
         Agendar
       </Button>
     </Card>

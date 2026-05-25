@@ -11,7 +11,6 @@ import { getServices } from '../../services/services/servicesService';
 import { createAppointment, getAvailableSlots } from '../services/appointmentsService';
 import type { Barber } from '../../barbers/types';
 import type { Service } from '../../services/types';
-import type { AvailableSlot } from '../types';
 
 export function BookAppointmentPage() {
   const [searchParams] = useSearchParams();
@@ -20,7 +19,7 @@ export function BookAppointmentPage() {
 
   const [services, setServices] = useState<Service[]>([]);
   const [barbers, setBarbers] = useState<Barber[]>([]);
-  const [slots, setSlots] = useState<AvailableSlot[]>([]);
+  const [slots, setSlots] = useState<string[]>([]);
 
   const [selectedServiceId, setSelectedServiceId] = useState(searchParams.get('serviceId') ?? '');
   const [selectedBarberId, setSelectedBarberId] = useState('');
@@ -104,7 +103,7 @@ export function BookAppointmentPage() {
             <option value="">Selecione um serviço</option>
             {services.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.name} — {s.durationMinutes} min — {s.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                {s.name} — {s.durationMinutes} min — {Number(s.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
               </option>
             ))}
           </select>
@@ -120,7 +119,7 @@ export function BookAppointmentPage() {
             <option value="">Selecione um barbeiro</option>
             {barbers.map((b) => (
               <option key={b.id} value={b.id}>
-                {b.name}
+                {b.user.name}
               </option>
             ))}
           </select>
@@ -138,7 +137,7 @@ export function BookAppointmentPage() {
         </div>
 
         {selectedBarberId && selectedServiceId && selectedDate && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-zinc-700">Horário disponível</label>
             {loadingSlots ? (
               <p className="text-sm text-zinc-500">Buscando horários...</p>
@@ -148,15 +147,15 @@ export function BookAppointmentPage() {
               <div className="flex flex-wrap gap-2">
                 {slots.map((slot) => (
                   <button
-                    key={slot.startTime}
-                    onClick={() => setSelectedSlot(slot.startTime)}
+                    key={slot}
+                    onClick={() => setSelectedSlot(slot)}
                     className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
-                      selectedSlot === slot.startTime
+                      selectedSlot === slot
                         ? 'border-zinc-900 bg-zinc-900 text-white'
                         : 'border-zinc-300 text-zinc-700 hover:border-zinc-500'
                     }`}
                   >
-                    {slot.startTime}
+                    {slot}
                   </button>
                 ))}
               </div>
@@ -170,7 +169,7 @@ export function BookAppointmentPage() {
           <p className="text-sm font-semibold text-zinc-900">Resumo do agendamento</p>
           <div className="flex flex-col gap-1 text-sm text-zinc-600">
             <p><span className="font-medium">Serviço:</span> {selectedService?.name}</p>
-            <p><span className="font-medium">Barbeiro:</span> {selectedBarber?.name}</p>
+            <p><span className="font-medium">Barbeiro:</span> {selectedBarber?.user.name}</p>
             <p><span className="font-medium">Data:</span> {new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR')}</p>
             <p><span className="font-medium">Horário:</span> {selectedSlot}</p>
           </div>

@@ -9,9 +9,12 @@ export type Appointment = {
   startTime: string;
   endTime: string;
   status: AppointmentStatus;
-  barberName?: string;
-  serviceName?: string;
-  clientName?: string;
+  createdAt?: string;
+};
+
+export type AppointmentWithRelations = Appointment & {
+  client?: { name: string; email: string };
+  service?: { name: string; durationMinutes: number; price: string };
 };
 
 export type CreateAppointmentInput = {
@@ -19,9 +22,4 @@ export type CreateAppointmentInput = {
   serviceId: string;
   appointmentDate: string;
   startTime: string;
-};
-
-export type AvailableSlot = {
-  startTime: string;
-  endTime: string;
 };

@@ -6,14 +6,24 @@ export async function adminGetServices(): Promise<Service[]> {
   return apiFetch<Service[]>('/admin/services');
 }
 
-export async function adminCreateService(data: Omit<Service, 'id'>): Promise<Service> {
+type ServicePayload = {
+  name: string;
+  description?: string;
+  price: number;
+  durationMinutes: number;
+};
+
+export async function adminCreateService(data: ServicePayload): Promise<Service> {
   return apiFetch<Service>('/admin/services', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function adminUpdateService(id: string, data: Partial<Omit<Service, 'id'>>): Promise<Service> {
+export async function adminUpdateService(
+  id: string,
+  data: Partial<ServicePayload>
+): Promise<Service> {
   return apiFetch<Service>(`/admin/services/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -28,7 +38,12 @@ export async function adminGetBarbers(): Promise<Barber[]> {
   return apiFetch<Barber[]>('/admin/barbers');
 }
 
-export async function adminCreateBarber(data: { name: string; email: string }): Promise<Barber> {
+export async function adminCreateBarber(data: {
+  name: string;
+  email: string;
+  password: string;
+  bio?: string;
+}): Promise<Barber> {
   return apiFetch<Barber>('/admin/barbers', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -43,9 +58,12 @@ export async function adminGetAvailability(barberId: string): Promise<Availabili
   return apiFetch<Availability[]>(`/admin/barbers/${barberId}/availability`);
 }
 
-export async function adminSetAvailability(barberId: string, data: Omit<Availability, 'id' | 'barberId'>[]): Promise<Availability[]> {
+export async function adminSetAvailability(
+  barberId: string,
+  items: { weekday: number; startTime: string; endTime: string }[]
+): Promise<Availability[]> {
   return apiFetch<Availability[]>(`/admin/barbers/${barberId}/availability`, {
     method: 'PUT',
-    body: JSON.stringify(data),
+    body: JSON.stringify({ items }),
   });
 }

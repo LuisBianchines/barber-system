@@ -2,7 +2,7 @@ export type Service = {
   id: string;
   name: string;
   description?: string;
-  price: number;
+  price: string;
   durationMinutes: number;
   active: boolean;
 };
