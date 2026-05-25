@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import type { User, UserRole } from '../types';
 
 const TOKEN_KEY = 'barberscheduler_token';
@@ -27,22 +27,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
-  useEffect(() => {
-    if (token) localStorage.setItem(TOKEN_KEY, token);
-    else localStorage.removeItem(TOKEN_KEY);
-  }, [token]);
-
-  useEffect(() => {
-    if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
-    else localStorage.removeItem(USER_KEY);
-  }, [user]);
-
   const setSession = useCallback((newToken: string, newUser: User) => {
+    localStorage.setItem(TOKEN_KEY, newToken);
+    localStorage.setItem(USER_KEY, JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
     setToken(null);
     setUser(null);
   }, []);
