@@ -16,6 +16,12 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 let nextId = 0;
 
+const typeClasses: Record<ToastType, string> = {
+  success: 'bg-emerald-800/90 border border-emerald-600/30 text-emerald-100',
+  error: 'bg-brand-red/90 border border-brand-red/40 text-white',
+  info: 'bg-brand-graphite border border-brand-gold/20 text-brand-ivory',
+};
+
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -27,20 +33,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     }, 4000);
   }, []);
 
-  const typeClasses: Record<ToastType, string> = {
-    success: 'bg-green-600',
-    error: 'bg-red-600',
-    info: 'bg-zinc-800',
-  };
-
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full px-4 sm:px-0 sm:w-auto">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`rounded-lg px-4 py-3 text-sm text-white shadow-lg ${typeClasses[toast.type]}`}
+            className={`rounded-xl px-4 py-3 text-sm shadow-premium backdrop-blur-sm ${typeClasses[toast.type]}`}
           >
             {toast.message}
           </div>

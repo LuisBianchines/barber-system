@@ -76,16 +76,16 @@ export function AdminAvailabilityPage() {
     <div className="flex flex-col gap-6">
       <PageHeader title="Disponibilidade" subtitle="Configure os horários de trabalho dos barbeiros" />
 
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-zinc-700">Barbeiro</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-brand-silver">Barbeiro</label>
         <select
           value={selectedBarberId}
           onChange={(e) => setSelectedBarberId(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 max-w-xs"
+          className="rounded-xl border border-brand-graphite bg-brand-ink/60 px-3 py-2.5 text-sm text-brand-ivory focus:outline-none focus:ring-2 focus:ring-brand-gold/50 max-w-xs"
         >
-          <option value="">Selecione um barbeiro</option>
+          <option value="" className="bg-brand-charcoal">Selecione um barbeiro</option>
           {barbers.map((b) => (
-            <option key={b.id} value={b.id}>{b.user.name}</option>
+            <option key={b.id} value={b.id} className="bg-brand-charcoal">{b.user.name}</option>
           ))}
         </select>
       </div>
@@ -98,7 +98,7 @@ export function AdminAvailabilityPage() {
             <div className="flex flex-col gap-3">
               {slots.map((slot, idx) => (
                 <Card key={slot.weekday} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-                  <label className="flex items-center gap-2 min-w-[110px]">
+                  <label className="flex items-center gap-2 min-w-[110px] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={slot.enabled}
@@ -107,12 +107,12 @@ export function AdminAvailabilityPage() {
                         updated[idx] = { ...slot, enabled: e.target.checked };
                         setSlots(updated);
                       }}
-                      className="h-4 w-4 rounded border-zinc-300"
+                      className="h-4 w-4 rounded border-brand-graphite accent-brand-gold"
                     />
-                    <span className="text-sm font-medium text-zinc-800">{DAYS[slot.weekday]}</span>
+                    <span className="text-sm font-medium text-brand-ivory">{DAYS[slot.weekday]}</span>
                   </label>
                   {slot.enabled && (
-                    <div className="flex items-center gap-2 text-sm text-zinc-700">
+                    <div className="flex items-center gap-2 text-sm text-brand-silver">
                       <input
                         type="time"
                         value={slot.startTime}
@@ -121,9 +121,9 @@ export function AdminAvailabilityPage() {
                           updated[idx] = { ...slot, startTime: e.target.value };
                           setSlots(updated);
                         }}
-                        className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                        className="rounded-xl border border-brand-graphite bg-brand-ink/60 px-2 py-1.5 text-sm text-brand-ivory focus:outline-none focus:ring-2 focus:ring-brand-gold/50 [color-scheme:dark]"
                       />
-                      <span>até</span>
+                      <span className="text-brand-smoke">até</span>
                       <input
                         type="time"
                         value={slot.endTime}
@@ -132,7 +132,7 @@ export function AdminAvailabilityPage() {
                           updated[idx] = { ...slot, endTime: e.target.value };
                           setSlots(updated);
                         }}
-                        className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                        className="rounded-xl border border-brand-graphite bg-brand-ink/60 px-2 py-1.5 text-sm text-brand-ivory focus:outline-none focus:ring-2 focus:ring-brand-gold/50 [color-scheme:dark]"
                       />
                     </div>
                   )}

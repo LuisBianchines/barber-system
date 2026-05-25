@@ -113,7 +113,7 @@ export function AdminServicesPage() {
 
       {showForm && (
         <Card className="flex flex-col gap-4">
-          <p className="font-semibold text-zinc-900">{editingId ? 'Editar serviço' : 'Novo serviço'}</p>
+          <p className="font-semibold text-brand-ivory">{editingId ? 'Editar serviço' : 'Novo serviço'}</p>
           <Input label="Nome *" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
           <Input label="Descrição" value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} />
           <div className="grid grid-cols-2 gap-3">
@@ -133,10 +133,11 @@ export function AdminServicesPage() {
         {services.map((s) => (
           <Card key={s.id} className={`flex items-center justify-between gap-4 ${!s.active ? 'opacity-60' : ''}`}>
             <div>
-              <p className="font-medium text-zinc-900">{s.name}</p>
-              <p className="text-sm text-zinc-500">
-                {Number(s.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} · {s.durationMinutes} min
-                {!s.active && <span className="ml-2 text-xs text-red-500">Inativo</span>}
+              <p className="font-medium text-brand-ivory">{s.name}</p>
+              <p className="text-sm text-brand-silver">
+                <span className="text-brand-gold">{Number(s.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                {' · '}{s.durationMinutes} min
+                {!s.active && <span className="ml-2 text-xs text-red-400">Inativo</span>}
               </p>
             </div>
             <div className="flex gap-2 shrink-0">

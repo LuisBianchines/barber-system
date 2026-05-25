@@ -17,15 +17,15 @@ export function ServiceCard({ service }: ServiceCardProps) {
   return (
     <Card className="flex flex-col gap-3">
       <div>
-        <h3 className="text-base font-semibold text-zinc-900">{service.name}</h3>
+        <h3 className="text-base font-semibold text-brand-ivory">{service.name}</h3>
         {service.description && (
-          <p className="mt-1 text-sm text-zinc-500">{service.description}</p>
+          <p className="mt-1 text-sm text-brand-silver">{service.description}</p>
         )}
       </div>
-      <div className="flex items-center gap-3 text-sm text-zinc-600">
-        <span className="font-medium text-zinc-900">{formatPrice(service.price)}</span>
-        <span>•</span>
-        <span>{service.durationMinutes} min</span>
+      <div className="flex items-center gap-3 text-sm">
+        <span className="font-semibold text-brand-gold">{formatPrice(service.price)}</span>
+        <span className="text-brand-graphite">•</span>
+        <span className="text-brand-silver">{service.durationMinutes} min</span>
       </div>
       <Button
         onClick={() => navigate(`/app/agendar?serviceId=${service.id}`)}

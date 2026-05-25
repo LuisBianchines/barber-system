@@ -1,5 +1,15 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
+import { BrandLogo } from '../brand/BrandLogo';
+
+const navLinks = [
+  { to: '/app/servicos', label: 'Serviços' },
+  { to: '/app/agendar', label: 'Agendar' },
+  { to: '/app/agendamentos', label: 'Meus agendamentos' },
+];
+
+const activeClass = 'text-brand-gold border-b-2 border-brand-gold';
+const inactiveClass = 'text-brand-silver hover:text-brand-ivory border-b-2 border-transparent';
 
 export function AuthenticatedLayout() {
   const { user, logout } = useAuth();
@@ -11,43 +21,47 @@ export function AuthenticatedLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <header className="bg-white border-b border-zinc-200 px-4 py-3 flex items-center justify-between">
-        <Link to="/app" className="text-lg font-bold text-zinc-900">
-          BarberScheduler
-        </Link>
-        <div className="flex items-center gap-4">
-          <nav className="hidden md:flex items-center gap-4 text-sm">
-            <Link to="/app/servicos" className="text-zinc-600 hover:text-zinc-900">
-              Serviços
-            </Link>
-            <Link to="/app/agendar" className="text-zinc-600 hover:text-zinc-900">
-              Agendar
-            </Link>
-            <Link to="/app/agendamentos" className="text-zinc-600 hover:text-zinc-900">
-              Meus agendamentos
-            </Link>
-          </nav>
-          <span className="text-sm text-zinc-500 hidden md:block">{user?.name}</span>
-          <button
-            onClick={handleLogout}
-            className="text-sm text-zinc-500 hover:text-zinc-800 underline"
-          >
-            Sair
-          </button>
+    <div className="min-h-screen bg-brand-ink">
+      <header className="border-b border-brand-gold/10 bg-brand-black/80 px-4 py-3 backdrop-blur-sm">
+        <div className="mx-auto max-w-2xl flex items-center justify-between gap-4">
+          <NavLink to="/app">
+            <BrandLogo size="sm" showText />
+          </NavLink>
+          <div className="hidden md:flex items-center gap-5 text-sm">
+            {navLinks.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) => `pb-0.5 transition-colors font-medium ${isActive ? activeClass : inactiveClass}`}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden md:block text-sm text-brand-smoke">{user?.name}</span>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-brand-smoke hover:text-brand-ivory transition-colors"
+            >
+              Sair
+            </button>
+          </div>
         </div>
       </header>
 
-      <nav className="md:hidden bg-white border-b border-zinc-200 flex overflow-x-auto text-sm">
-        <Link to="/app/servicos" className="px-4 py-3 text-zinc-600 hover:text-zinc-900 whitespace-nowrap">
-          Serviços
-        </Link>
-        <Link to="/app/agendar" className="px-4 py-3 text-zinc-600 hover:text-zinc-900 whitespace-nowrap">
-          Agendar
-        </Link>
-        <Link to="/app/agendamentos" className="px-4 py-3 text-zinc-600 hover:text-zinc-900 whitespace-nowrap">
-          Meus agendamentos
-        </Link>
+      <nav className="md:hidden border-b border-brand-gold/10 bg-brand-black/60 flex overflow-x-auto text-sm">
+        {navLinks.map(({ to, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `px-4 py-3 whitespace-nowrap font-medium transition-colors ${isActive ? 'text-brand-gold' : 'text-brand-silver hover:text-brand-ivory'}`
+            }
+          >
+            {label}
+          </NavLink>
+        ))}
       </nav>
 
       <main className="mx-auto max-w-2xl px-4 py-6">

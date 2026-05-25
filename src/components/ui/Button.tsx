@@ -10,10 +10,14 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variantClasses: Record<Variant, string> = {
-  primary: 'bg-zinc-900 text-white hover:bg-zinc-700 disabled:bg-zinc-400',
-  secondary: 'bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50 disabled:bg-zinc-100',
-  danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300',
-  ghost: 'bg-transparent text-zinc-700 hover:bg-zinc-100 disabled:text-zinc-400',
+  primary:
+    'bg-brand-gold text-brand-black hover:bg-brand-copper shadow-gold disabled:bg-brand-smoke disabled:text-brand-graphite',
+  secondary:
+    'bg-transparent text-brand-ivory border border-brand-gold/40 hover:border-brand-gold hover:bg-brand-graphite disabled:border-brand-graphite disabled:text-brand-smoke',
+  danger:
+    'bg-brand-red/90 text-white hover:bg-brand-red disabled:bg-brand-red/40',
+  ghost:
+    'bg-transparent text-brand-silver hover:text-brand-ivory hover:bg-brand-graphite disabled:text-brand-smoke',
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -34,7 +38,7 @@ export function Button({
   return (
     <button
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60 disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...props}
     >
       {loading && (

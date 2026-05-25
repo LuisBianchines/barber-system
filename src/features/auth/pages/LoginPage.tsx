@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../../../components/ui/Toast';
 import { Input } from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
+import { BrandLogo } from '../../../components/brand/BrandLogo';
 
 export function LoginPage() {
   const { setSession, redirectPathForRole } = useAuth();
@@ -32,34 +33,41 @@ export function LoginPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
-        <p className="mt-1 text-sm text-zinc-500">Acesse sua conta para agendar</p>
+      <div className="flex flex-col items-center gap-4 text-center">
+        <BrandLogo size="lg" showText={false} />
+        <div>
+          <h1 className="text-2xl font-black text-brand-ivory">Entrar no BarberSystem</h1>
+          <p className="mt-1 text-sm text-brand-silver">
+            Acesse sua conta para agendar ou gerenciar horários.
+          </p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <Input
-          label="E-mail"
-          type="email"
-          placeholder="seu@email.com"
-          error={errors.email?.message}
-          {...register('email')}
-        />
-        <Input
-          label="Senha"
-          type="password"
-          placeholder="••••••"
-          error={errors.password?.message}
-          {...register('password')}
-        />
-        <Button type="submit" loading={isSubmitting} size="lg" className="w-full mt-2">
-          Entrar
-        </Button>
-      </form>
+      <div className="rounded-2xl border border-brand-gold/15 bg-brand-charcoal/80 p-6 shadow-premium backdrop-blur-sm">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <Input
+            label="E-mail"
+            type="email"
+            placeholder="seu@email.com"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <Input
+            label="Senha"
+            type="password"
+            placeholder="••••••"
+            error={errors.password?.message}
+            {...register('password')}
+          />
+          <Button type="submit" loading={isSubmitting} size="lg" className="w-full mt-2">
+            Entrar
+          </Button>
+        </form>
+      </div>
 
-      <p className="text-center text-sm text-zinc-500">
+      <p className="text-center text-sm text-brand-silver">
         Não tem conta?{' '}
-        <Link to="/register" className="font-medium text-zinc-900 underline">
+        <Link to="/register" className="font-semibold text-brand-gold hover:text-brand-copper transition-colors">
           Cadastre-se
         </Link>
       </p>

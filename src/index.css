@@ -6,4 +6,15 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #050505;
+  color: #F5F2EE;
+}
+
+@layer utilities {
+  .bg-premium-radial {
+    background:
+      radial-gradient(circle at top left, rgba(214, 163, 106, 0.16), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(44, 79, 143, 0.12), transparent 28%),
+      linear-gradient(135deg, #050505 0%, #0F0F10 45%, #18181B 100%);
+  }
 }

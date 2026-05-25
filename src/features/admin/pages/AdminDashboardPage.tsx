@@ -3,9 +3,24 @@ import { Card } from '../../../components/ui/Card';
 import { PageHeader } from '../../../components/ui/PageHeader';
 
 const modules = [
-  { label: 'Serviços', description: 'Gerenciar serviços da barbearia', href: '/admin/servicos' },
-  { label: 'Barbeiros', description: 'Gerenciar barbeiros e status', href: '/admin/barbeiros' },
-  { label: 'Disponibilidade', description: 'Configurar horários de atendimento', href: '/admin/disponibilidade' },
+  {
+    label: 'Serviços',
+    description: 'Gerenciar serviços da barbearia',
+    href: '/admin/servicos',
+    accent: '✂',
+  },
+  {
+    label: 'Barbeiros',
+    description: 'Gerenciar barbeiros e status',
+    href: '/admin/barbeiros',
+    accent: '👤',
+  },
+  {
+    label: 'Disponibilidade',
+    description: 'Configurar horários de atendimento',
+    href: '/admin/disponibilidade',
+    accent: '🗓',
+  },
 ];
 
 export function AdminDashboardPage() {
@@ -15,9 +30,12 @@ export function AdminDashboardPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {modules.map((m) => (
           <Link key={m.href} to={m.href}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-              <p className="font-semibold text-zinc-900">{m.label}</p>
-              <p className="mt-1 text-sm text-zinc-500">{m.description}</p>
+            <Card className="flex flex-col gap-3 h-full hover:border-brand-gold/30 transition-colors cursor-pointer">
+              <span className="text-3xl">{m.accent}</span>
+              <div>
+                <p className="font-semibold text-brand-ivory">{m.label}</p>
+                <p className="mt-1 text-sm text-brand-silver">{m.description}</p>
+              </div>
             </Card>
           </Link>
         ))}

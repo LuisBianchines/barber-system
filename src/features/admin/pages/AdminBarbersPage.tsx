@@ -78,7 +78,7 @@ export function AdminBarbersPage() {
 
       {showForm && (
         <Card className="flex flex-col gap-4">
-          <p className="font-semibold text-zinc-900">Novo barbeiro</p>
+          <p className="font-semibold text-brand-ivory">Novo barbeiro</p>
           <Input label="Nome *" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
           <Input label="E-mail *" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
           <Input label="Senha *" type="password" placeholder="Mínimo 6 caracteres" value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} />
@@ -96,11 +96,11 @@ export function AdminBarbersPage() {
         {barbers.map((b) => (
           <Card key={b.id} className={`flex items-center justify-between gap-4 ${!b.active ? 'opacity-60' : ''}`}>
             <div>
-              <p className="font-medium text-zinc-900">{b.user.name}</p>
-              <p className="text-sm text-zinc-500">
+              <p className="font-medium text-brand-ivory">{b.user.name}</p>
+              <p className="text-sm text-brand-silver">
                 {b.user.email}
-                {b.bio && <span className="ml-2 text-zinc-400">· {b.bio}</span>}
-                {!b.active && <span className="ml-2 text-xs text-red-500">Inativo</span>}
+                {b.bio && <span className="ml-2 text-brand-smoke">· {b.bio}</span>}
+                {!b.active && <span className="ml-2 text-xs text-red-400">Inativo</span>}
               </p>
             </div>
             <Button size="sm" variant={b.active ? 'danger' : 'ghost'} onClick={() => handleToggle(b.id)}>

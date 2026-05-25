@@ -5,9 +5,18 @@ type BadgeProps = {
 };
 
 const statusConfig: Record<AppointmentStatus, { label: string; className: string }> = {
-  SCHEDULED: { label: 'Agendado', className: 'bg-blue-100 text-blue-700' },
-  COMPLETED: { label: 'Concluído', className: 'bg-green-100 text-green-700' },
-  CANCELLED: { label: 'Cancelado', className: 'bg-red-100 text-red-700' },
+  SCHEDULED: {
+    label: 'Agendado',
+    className: 'bg-brand-blue/20 text-sky-300 border border-brand-blue/30',
+  },
+  COMPLETED: {
+    label: 'Concluído',
+    className: 'bg-emerald-900/30 text-emerald-400 border border-emerald-700/30',
+  },
+  CANCELLED: {
+    label: 'Cancelado',
+    className: 'bg-brand-red/15 text-red-400 border border-brand-red/25',
+  },
 };
 
 export function StatusBadge({ status }: BadgeProps) {

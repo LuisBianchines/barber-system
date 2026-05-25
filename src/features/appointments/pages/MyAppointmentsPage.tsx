@@ -78,7 +78,7 @@ export function MyAppointmentsPage() {
 
       {upcoming.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Próximos</h2>
+          <h2 className="text-xs font-semibold text-brand-smoke uppercase tracking-wide">Próximos</h2>
           {upcoming.map((a) => (
             <AppointmentCard key={a.id} appointment={a} onCancel={handleCancel} cancelling={cancelling === a.id} />
           ))}
@@ -87,7 +87,7 @@ export function MyAppointmentsPage() {
 
       {past.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Histórico</h2>
+          <h2 className="text-xs font-semibold text-brand-smoke uppercase tracking-wide">Histórico</h2>
           {past.map((a) => (
             <AppointmentCard key={a.id} appointment={a} />
           ))}
@@ -115,8 +115,8 @@ function AppointmentCard({ appointment: a, onCancel, cancelling }: AppointmentCa
     <Card className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col gap-0.5">
-          <p className="text-sm text-zinc-600">{date} às {a.startTime}</p>
-          <p className="text-xs text-zinc-400">até {a.endTime}</p>
+          <p className="text-sm text-brand-silver">{date} às {a.startTime}</p>
+          <p className="text-xs text-brand-smoke">até {a.endTime}</p>
         </div>
         <StatusBadge status={a.status} />
       </div>

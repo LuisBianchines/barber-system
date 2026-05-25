@@ -51,13 +51,13 @@ export function BarberAgendaPage() {
     <div className="flex flex-col gap-6">
       <PageHeader title="Minha agenda" />
 
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-zinc-700">Data</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-brand-silver">Data</label>
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 max-w-xs"
+          className="rounded-xl border border-brand-graphite bg-brand-ink/60 px-3 py-2.5 text-sm text-brand-ivory focus:outline-none focus:ring-2 focus:ring-brand-gold/50 max-w-xs [color-scheme:dark]"
         />
       </div>
 
@@ -73,9 +73,9 @@ export function BarberAgendaPage() {
             <Card key={a.id} className={`flex flex-col gap-3 ${a.status === 'CANCELLED' ? 'opacity-60' : ''}`}>
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-col gap-0.5">
-                  <p className="font-medium text-zinc-900">{a.startTime} — {a.endTime}</p>
-                  <p className="text-sm text-zinc-700">{a.client?.name ?? '—'}</p>
-                  <p className="text-sm text-zinc-500">{a.service?.name ?? '—'}</p>
+                  <p className="font-medium text-brand-ivory">{a.startTime} — {a.endTime}</p>
+                  <p className="text-sm text-brand-silver">{a.client?.name ?? '—'}</p>
+                  <p className="text-sm text-brand-smoke">{a.service?.name ?? '—'}</p>
                 </div>
                 <StatusBadge status={a.status} />
               </div>
