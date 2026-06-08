@@ -1,0 +1,65 @@
+name: BarberSystem Keep Alive E2E
+
+on:
+  schedule:
+    # Aproximadamente 08:17 BRT, considerando UTC-3
+    - cron: "17 11 * * *"
+    # Aproximadamente 20:47 BRT, considerando UTC-3
+    - cron: "47 23 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: barbersystem-keepalive-e2e
+  cancel-in-progress: false
+
+jobs:
+  keepalive:
+    name: Run login keep-alive tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run keep-alive E2E
+        run: npm run e2e:keepalive
+        env:
+          E2E_BASE_URL: ${{ secrets.E2E_BASE_URL }}
+
+          E2E_CLIENT_EMAIL: ${{ secrets.E2E_CLIENT_EMAIL }}
+          E2E_CLIENT_PASSWORD: ${{ secrets.E2E_CLIENT_PASSWORD }}
+
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+
+          E2E_BARBER_EMAIL: ${{ secrets.E2E_BARBER_EMAIL }}
+          E2E_BARBER_PASSWORD: ${{ secrets.E2E_BARBER_PASSWORD }}
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7

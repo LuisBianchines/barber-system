@@ -26,3 +26,6 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.env.e2e
+playwright-report/
+test-results/
